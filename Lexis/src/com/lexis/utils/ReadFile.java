@@ -1,16 +1,17 @@
 package com.lexis.utils;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 
+import com.lexis.Matrix;
+
 public class ReadFile {
 
-	public static char[][] getMatrix(String filePath) throws IOException {
+	public static Matrix getMatrixFromFile(String filePath) throws IOException {
 		
-		char[][] matrix = null;
+		Matrix matrix = null;
 		int maxChar = 1000;
 		
 		try {
@@ -25,11 +26,15 @@ public class ReadFile {
 			m = reader.getLineNumber();
 			reader.reset();
 			
-			matrix = new char[m][n];
-			
+			matrix = new Matrix(m,n);
+			char charBuffer;
 			for(int i = 0; i < m; i++) {
 				for(int j = 0; j < n; j++) {
-					matrix[i][j] = (char)reader.read();
+					charBuffer = (char)reader.read();
+					if(charBuffer == '\n') {
+						charBuffer = (char)reader.read();
+					}
+					matrix.setPosition(charBuffer, i, j);
 				}
 			}
 			reader.close();
